@@ -1,3 +1,5 @@
+def registory = 'https://trial4drys1.jfrog.io'
+
 pipeline{
     agent any
     environment{
