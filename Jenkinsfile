@@ -31,7 +31,7 @@ pipeline{
         stage("Jar Publish"){
             steps{
                 echo "****Jar Publish started****"
-                def server = Artifactory.newserver url: registry + "/artifactory", credentialsId:"artifact-cred"
+                def server = Artifactory.newServer url: registry + "/artifactory", credentialsId:"artifact-cred"
                 def properties = "buildid=${env.BUILD_ID}.commitid=${GIT_COMMIT}"
                 def uploadSpec = """{
                     "files":[
@@ -44,12 +44,13 @@ pipeline{
                     }
                 ]
                     }"""
-                    def buildinfo = server.upload(uploadspec)
+                    def buildInfo = server.upload(uploadspec)
                     buildInfo.env.collect()
-                    server.publish.BuildInfo(buildInfo)
+                    server.publishBuildInfo(buildInfo)
                     echo "****Jar Publish Ended****"
                     
                 }
             }
         }
     }  
+
