@@ -7,7 +7,7 @@ pipeline{
         stage("build"){
             steps{
                 echo "****building started****"
-                sh "mvn clean deploy-Dmaven.test.skip=true"
+                sh "mvn clean deploy - Dmaven.test.skip=true"
                 echo "****building completed****"
             }
         }
