@@ -7,7 +7,7 @@ pipeline{
         stage("build"){
             steps{
                 echo "****building started****"
-                sh "mvn clean deploy -Dmaven.test.skip=true"
+                sh "mvn clean deploy-Dmaven.test.skip=true"
                 echo "****building completed****"
             }
         }
@@ -28,6 +28,18 @@ pipeline{
                 }
             }
         }
-    }
+        stage("Quality Gate"){
+            steps{
+                script{
+                    timeout(time:1, unit:'HOURS'){
+                        def qg= waitforQualityGate()
+                        if(qg.status!='ok'){
+                            error "pipeline aborted due to quality gate failuare"
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }  
 }
-
