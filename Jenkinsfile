@@ -1,16 +1,25 @@
-pipeline {
+pipeline{
     agent any
-    environment {
-        PATH = "/opt/maven/bin:$PATH"
+    environment{
+        PATH="/opt/maven/bin:$PATH"
     }
     stages{
-        stage('build'){
+        stage("build"){
             steps{
-                sh "mvn clean deploy"
+                echo "****building started****"
+                sh "mvn clean deploy-Dmaven.test.skip=true"
+                echo "****building completed****"
             }
         }
-        stage('SonarQube analysis'){
-            environmrnt {
+        stage("test"){
+            steps{
+                echo "****Unit testing started****"
+                sh "mvn surefire-report:report"
+                echo "****Unit testing completed****"
+            }
+        }
+        stage("SonarQube analysis"){
+            environment{
                 scannerHome = tool 'saidemy-sonar-scanner'
             }
             steps{
