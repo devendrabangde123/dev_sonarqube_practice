@@ -28,5 +28,28 @@ pipeline{
                 }
             }
         }
+        stage("Jar Publish"){
+            steps{
+                echo "****Jar Publish started****"
+                def server = Artifactory.newserver url: registry + "/artifactory", credentialsId:"artifact-cred"
+                def properties = "buildid=${env.BUILD_ID}.commitid=${GIT_COMMIT}"
+                def uploadSpec = """{
+                    "files":[
+                    {
+                        "pattern": "jarstaging/(*)",
+                        "target": "sai-libs-release-local/{1}",
+                        "flat": "false",
+                        "props": "${properties}"
+                        "exclusion": ["*.sha1", "*.md5"]
+                    }
+                ]
+                    }"""
+                    def buildinfo = server.upload(uploadspec)
+                    buildInfo.env.collect()
+                    server.publish.BuildInfo(buildInfo)
+                    echo "****Jar Publish Ended****"
+                    
+                }
+            }
+        }
     }  
-}
