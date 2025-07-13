@@ -29,12 +29,13 @@ pipeline{
                 }
             }
         }
-        stage("Jar Publish"){
+        stage('Jar Publish'){
             steps{
-                echo "****Jar Publish started****"
-                def server = Artifactory.newServer url: registory + "/artifactory", credentialsId:"artifact-cred"
-                def properties = "buildid=${env.BUILD_ID}.commitid=${GIT_COMMIT}"
-                def uploadSpec = """{
+                script{
+                    echo "****Jar Publish started****"
+                    def server = Artifactory.newServer url: registry + "/artifactory", credentialsID: "artifact-cred"
+                    def properties = "buildid=${env.BUILD_ID}.commitid=${GIT_COMMIT}"
+                    def uploadSpec = """{
                     "files":[
                     {
                         "pattern": "jarstaging/(*)",
@@ -43,15 +44,14 @@ pipeline{
                         "props": "${properties}"
                         "exclusion": ["*.sha1", "*.md5"]
                     }
-                ]
-                    }"""
-                    def buildInfo = server.upload(uploadspec)
-                    buildInfo.env.collect()
-                    server.publishBuildInfo(buildInfo)
-                    echo "****Jar Publish Ended****"
-                    
-                }
+                    ]
+                }"""
+                def buildInfo = server.upload(uploadspec)
+                buildInfo.env.collect()
+                server.publishBuildInfo(buildInfo)
+                echo "****Jar Publish Ended****"
             }
         }
-    }  
-
+   }
+} 
+}
