@@ -33,7 +33,7 @@ pipeline{
             steps{
                 script{
                     echo "****Jar Publish started****"
-                    def server = Artifactory.newServer url: registry + "/artifactory", credentialsID: "artifact-cred"
+                    def server = Artifactory.newServer url: registory + "/artifactory", credentialsID: "artifact-cred"
                     def properties = "buildid=${env.BUILD_ID}.commitid=${GIT_COMMIT}"
                     def uploadSpec = """{
                     "files":[
