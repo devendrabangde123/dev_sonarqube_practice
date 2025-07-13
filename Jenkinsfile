@@ -44,7 +44,7 @@ pipeline{
                         "target": "sai-libs-release-local/{1}",
                         "flat": "false",
                         "props": "${properties}"
-                        "exclusion": ["*.sha1", "*.md5"]
+                        "exclusions": ["*.sha1", "*.md5"]
                     }
                     ]
                 }"""
